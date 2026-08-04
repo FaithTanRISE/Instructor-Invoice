@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Trip Expense Claim Form</title>
+<style>
+  :root{
+    --ink:#1c2b3a;
+    --ink-soft:#5a6b7a;
+    --paper:#fbfaf7;
+    --line:#d8d3c7;
+    --accent:#af6a3e;
+    --accent-soft:#f1e2d3;
+    --field-bg:#ffffff;
+    --ok:#5a7a5e;
+    --locked-bg:#f2efe8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:#e9e6df;
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    color:var(--ink);
+    padding:28px 12px;
+  }
+  .sheet{
+    max-width:1020px;
+    margin:0 auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow:0 2px 18px rgba(28,43,58,0.08);
+    padding:36px 40px 30px;
+  }
+  .letterhead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-bottom:3px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:22px;
+  }
+  .letterhead h1{
+    font-family:Georgia, 'Times New Roman', serif;
+    font-size:25px;
+    letter-spacing:0.3px;
+    margin:0;
+  }
+  .letterhead .tag{
+    font-size:11px;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .letterhead .ref{
+    text-align:right;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .ref input{
+    border:none;
+    border-bottom:1px solid var(--line);
+    background:transparent;
+    font-size:12px;
+    width:130px;
+    text-align:right;
+    color:var(--ink);
+    font-family:inherit;
+  }
+
+  section{margin-bottom:22px;}
+  .section-label{
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:700;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .section-label .edit-btn{
+    flex:none;
+    background:none;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    font-size:11px;
+    letter-spacing:0.5px;
+    text-transform:none;
+    padding:4px 10px;
+    border-radius:3px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .section-label .edit-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+  .grid-4{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+  }
+  .grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+  }
+  .field label{
+    display:block;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .field input[type=text], .field input[type=date], .field input[type=email], .field input[type=tel]{
+    width:100%;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    background:var(--field-bg);
+    border-radius:2px;
+    font-size:14px;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .field input:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+  }
+  .field input:disabled{
+    background:var(--locked-bg);
+    color:var(--ink-soft);
+    border-style:dashed;
+  }
+
+  .profile-actions{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+    flex-wrap:wrap;
+  }
+  .profile-actions button, .profile-actions label.filebtn{
+    font-family:inherit;
+    font-size:11.5px;
+    padding:7px 13px;
+    border-radius:3px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .profile-actions button:hover, .profile-actions label.filebtn:hover{border-color:var(--accent);color:var(--accent);}
+  .profile-actions .save{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+  .profile-actions .save:hover{color:#fff;opacity:0.9;}
+  .profile-status{
+    font-size:11px;
+    color:var(--ok);
+    margin-left:4px;
+    align-self:center;
+  }
+
+  table.claims{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12.5px;
+  }
+  table.claims thead th{
+    text-align:left;
+    font-size:10px;
+    letter-spacing:0.8px;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border-bottom:2px solid var(--ink);
+    padding:8px 6px;
+  }
+  table.claims tbody td{
+    border-bottom:1px solid var(--line);
+    padding:7px 6px;
+    vertical-align:top;
+  }
+  table.claims tbody tr:hover{background:rgba(175,106,62,0.05);}
+  table.claims tfoot td{
+    padding:10px 6px;
+    font-weight:700;
+    border-top:2px solid var(--ink);
+    font-size:13px;
+  }
+
+  input.datecell{
+    width:100%;
+    padding:6px 6px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    font-family:inherit;
+    font-size:12px;
+  }
+  select.category{
+    width:100%;
+    padding:6px 4px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    font-family:inherit;
+    font-size:12px;
+    background:#fff;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  input.desc{
+    width:100%;
+    padding:6px 8px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    font-family:inherit;
+    font-size:12px;
+  }
+  input.amt{
+    width:100%;
+    padding:6px 8px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    font-family:inherit;
+    font-size:12.5px;
+    text-align:right;
+  }
+  .running{
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink-soft);
+    padding-top:8px;
+    white-space:nowrap;
+  }
+  td.center{text-align:center;padding-top:8px;}
+  .receipt-chk{
+    width:17px;height:17px;
+    accent-color:var(--ok);
+    cursor:pointer;
+  }
+  .del-btn{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    cursor:pointer;
+    font-size:15px;
+    line-height:1;
+    padding:2px 6px;
+  }
+  .del-btn:hover{color:#a33;}
+
+  .add-row-btn{
+    margin-top:10px;
+    background:none;
+    border:1px dashed var(--line);
+    color:var(--ink-soft);
+    font-size:12px;
+    padding:7px 12px;
+    border-radius:3px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .add-row-btn:hover{border-color:var(--accent); color:var(--accent);}
+
+  .summary{
+    margin-top:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+  }
+  .note{
+    max-width:480px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    border-left:3px solid var(--accent);
+    padding-left:12px;
+  }
+  .summary-box{
+    width:280px;
+    border:1px solid var(--line);
+    background:var(--accent-soft);
+    flex-shrink:0;
+  }
+  .summary-box .row{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 16px;
+    font-size:13px;
+    border-bottom:1px solid rgba(28,43,58,0.08);
+  }
+  .summary-box .row.total{
+    font-weight:700;
+    font-size:16px;
+    border-bottom:none;
+    color:var(--ink);
+  }
+  .summary-box .row span:last-child{
+    font-variant-numeric:tabular-nums;
+  }
+
+  .sign-row{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+  }
+  .sign-box{
+    border-top:1px solid var(--ink);
+    padding-top:6px;
+    font-size:11px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .sign-box .line{
+    height:34px;
+  }
+
+  .toolbar{
+    max-width:1020px;
+    margin:0 auto 14px;
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+  }
+  .toolbar button{
+    font-family:inherit;
+    font-size:12.5px;
+    padding:8px 16px;
+    border-radius:3px;
+    border:1px solid var(--ink);
+    background:var(--ink);
+    color:#fff;
+    cursor:pointer;
+  }
+  .toolbar button.secondary{
+    background:transparent;
+    color:var(--ink);
+  }
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .toolbar{display:none;}
+    .sheet{box-shadow:none;border:none;max-width:100%;padding:20px 26px;}
+    .add-row-btn,.del-btn,.profile-actions,.edit-btn{display:none;}
+  }
+
+  @media (max-width:640px){
+    .grid-4{grid-template-columns:1fr 1fr;}
+    .grid-3{grid-template-columns:1fr;}
+    .sign-row{grid-template-columns:1fr;}
+    .summary{flex-direction:column;}
+    .sheet{padding:24px 18px;}
+    table.claims{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="submitAndPrint()">Print / Save as PDF</button>
+</div>
+
+<div class="sheet">
+
+  <div class="letterhead">
+    <div>
+      <div class="tag">Trip Expense Claim Form</div>
+      <h1>Trip Expense Claim Tracker</h1>
+    </div>
+    <div class="ref">
+      Date of submission<br>
+      <input type="date" id="submitDate">
+    </div>
+  </div>
+
+  <section>
+    <div class="section-label">
+      My details (one-time entry)
+      <button class="edit-btn" id="editBtn" onclick="toggleProfileLock()">Save</button>
+    </div>
+    <p style="font-size:11.5px;color:var(--ink-soft);margin:0 0 12px;line-height:1.5;">
+      Fill this in once and click <strong>Save</strong> — it'll lock your details and download a personalized
+      copy of this form. Use that downloaded file for every future claim so you never have to re-enter
+      your details again.
+    </p>
+    <div class="grid-4" id="profileFields">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" id="pName" placeholder="Full name">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="pEmail" placeholder="name@email.com">
+      </div>
+      <div class="field">
+        <label>Mobile</label>
+        <input type="tel" id="pMobile" placeholder="+65 8123 4567">
+      </div>
+      <div class="field">
+        <label>Program / role</label>
+        <input type="text" id="pProgram" placeholder="e.g. NTU CSM Platform">
+      </div>
+      <div class="field">
+        <label>Bank name</label>
+        <input type="text" id="pBankName" placeholder="e.g. DBS">
+      </div>
+      <div class="field">
+        <label>Bank account holder</label>
+        <input type="text" id="pBankHolder" placeholder="As per bank records">
+      </div>
+      <div class="field">
+        <label>Bank account no.</label>
+        <input type="text" id="pBankAcc" placeholder="Account number">
+      </div>
+      <div class="field">
+        <label>PayNow / UEN (optional)</label>
+        <input type="text" id="pPayNow" placeholder="Mobile / UEN linked to PayNow">
+      </div>
+    </div>
+    <div class="profile-actions">
+      <span class="profile-status" id="profileStatus"></span>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Trip details</div>
+    <div class="grid-3">
+      <div class="field">
+        <label>Program / project</label>
+        <input type="text" placeholder="Program or project name">
+      </div>
+      <div class="field">
+        <label>Trip period</label>
+        <input type="text" placeholder="e.g. 5–24 Apr 2026">
+      </div>
+      <div class="field">
+        <label>Destination(s)</label>
+        <input type="text" placeholder="e.g. Singapore, Padang, KL">
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">
+      Expense items
+      <button class="edit-btn" onclick="startNewClaim()">Start new claim</button>
+    </div>
+    <table class="claims">
+      <thead>
+        <tr>
+          <th style="width:118px;">Date</th>
+          <th>Description</th>
+          <th style="width:100px;">Amount (SGD)</th>
+          <th style="width:110px;">Running total (SGD)</th>
+          <th style="width:70px;text-align:center;">Receipt</th>
+          <th style="width:26px;"></th>
+        </tr>
+      </thead>
+      <tbody id="expenseBody">
+        <!-- rows injected by script -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">GRAND TOTAL</td>
+          <td class="running" id="footTotal">0.00</td>
+          <td id="footRunning" class="running">0.00</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    <button class="add-row-btn" onclick="addRow()">+ Add another line</button>
+  </section>
+
+  <div class="summary">
+    <div class="note">
+      Pick a description template from the dropdown on each line (Flight, Hotel, Trip Allowance,
+      Grab ride, meals, etc.), then fill in the specific details. For flights, note the airline, flight
+      number, route and booking ref. For hotels, note the hotel name, number of nights, check-in/check-out
+      dates and booking ref. For Grab, use two separate lines — one for the ride to the venue, one for the
+      ride back — each with its own fare; no need to include the booking ID, since that's on the attached
+      receipt. Attach the receipt or invoice for every line and tick "Receipt" once it's included. This
+      form stays editable even after printing — if changes are needed, just update the line items and
+      click "Print / Save as PDF" again for an updated copy.
+    </div>
+    <div class="summary-box">
+      <div class="row"><span>Lines claimed</span><span id="lineCount">0</span></div>
+      <div class="row"><span>Receipts attached</span><span id="receiptCount">0</span></div>
+      <div class="row"><span>Status</span><span id="claimStatus">Draft — not yet printed</span></div>
+      <div class="row total"><span>Total claim</span><span id="grandTotal">SGD 0.00</span></div>
+    </div>
+  </div>
+
+  <div class="sign-row">
+    <div class="sign-box">
+      <div class="line"></div>
+      Claimant signature &amp; date
+    </div>
+    <div class="sign-box">
+      <div class="line"></div>
+      Approved by &amp; date
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- description templates ----------
+const templates = [
+  {label:"Flight", text:"[Airline] [Flight No.] ([Origin]-[Destination]) - Booking Ref [ref]"},
+  {label:"Hotel", text:"[Hotel name], [no.] days (Check-in: [date] - Check-out: [date]) - Booking Ref [ref]"},
+  {label:"Trip Allowance", text:"Singapore Trip Allowance - [Program name]"},
+  {label:"Grab ride - to venue", text:"Grab ride from - [venue/hotel] -> [meeting venue]"},
+  {label:"Grab ride - from venue", text:"Grab ride from - [meeting venue] -> [venue/hotel]"},
+  {label:"Lunch", text:"Lunch - [venue / remarks]"},
+  {label:"Dinner", text:"Dinner - [venue / remarks]"},
+  {label:"Other", text:""}
+];
+
+function categoryOptions(){
+  return '<option value="">Select description template…</option>' +
+    templates.map(t=>`<option value="${t.text.replace(/"/g,'&quot;')}">${t.label}</option>`).join('');
+}
+
+function onTemplateChange(sel){
+  const desc = sel.closest('tr').querySelector('.desc');
+  if(sel.value) desc.value = sel.value;
+  desc.focus();
+  markEdited();
+}
+
+function makeRow(){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="date" class="datecell" onchange="markEdited()"></td>
+    <td>
+      <select class="category" onchange="onTemplateChange(this)">${categoryOptions()}</select>
+      <input type="text" class="desc" placeholder="Description details" oninput="markEdited()">
+    </td>
+    <td><input type="text" class="amt" placeholder="0.00" oninput="calcTotal()"></td>
+    <td class="running">0.00</td>
+    <td class="center"><input type="checkbox" class="receipt-chk" onchange="calcTotal()"></td>
+    <td class="center"><button class="del-btn" onclick="this.closest('tr').remove(); calcTotal();">✕</button></td>
+  `;
+  return tr;
+}
+
+function addRow(){
+  document.getElementById('expenseBody').appendChild(makeRow());
+}
+
+function startNewClaim(){
+  const proceed = confirm('Clear all expense line items and trip details for a new claim?\n\n(Your saved "My details" profile will NOT be affected.)');
+  if(!proceed) return;
+
+  // clear expense table and reseed 5 blank rows
+  document.getElementById('expenseBody').innerHTML = '';
+  for(let i=0;i<5;i++) addRow();
+
+  // clear trip details fields (Program/project, Trip period, Destination)
+  document.querySelectorAll('.grid-3 input').forEach(inp => inp.value = '');
+
+  // clear submission date
+  document.getElementById('submitDate').value = '';
+
+  // reset submission status
+  hasSubmitted = false;
+  document.getElementById('claimStatus').textContent = 'Draft — not yet printed';
+
+  calcTotal();
+}
+
+let hasSubmitted = false;
+
+function calcTotal(){
+  markEdited();
+  const rows = document.querySelectorAll('#expenseBody tr');
+  let running = 0;
+  let receipts = 0;
+  rows.forEach(r=>{
+    const amt = r.querySelector('.amt');
+    const rcpt = r.querySelector('.receipt-chk');
+    const runCell = r.querySelector('.running');
+    const v = parseFloat(amt.value);
+    if(!isNaN(v)) running += v;
+    runCell.textContent = running.toFixed(2);
+    if(rcpt && rcpt.checked) receipts++;
+  });
+  document.getElementById('lineCount').textContent = rows.length;
+  document.getElementById('receiptCount').textContent = receipts;
+  document.getElementById('grandTotal').textContent = 'SGD ' + running.toFixed(2);
+  document.getElementById('footTotal').textContent = running.toFixed(2);
+  document.getElementById('footRunning').textContent = running.toFixed(2);
+}
+
+function nowStamp(){
+  return new Date().toLocaleString('en-SG', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+}
+
+function markEdited(){
+  if(hasSubmitted){
+    document.getElementById('claimStatus').textContent = 'Amended — edited ' + nowStamp() + ' (reprint to update PDF)';
+  }
+}
+
+function submitAndPrint(){
+  hasSubmitted = true;
+  document.getElementById('claimStatus').textContent = 'Submitted — printed ' + nowStamp();
+  window.print();
+}
+
+// seed with a handful of starter rows
+for(let i=0;i<5;i++) addRow();
+calcTotal();
+
+// ---------- profile (one-time entry, edit / export / import — no browser storage used) ----------
+const profileIds = ['pName','pEmail','pMobile','pProgram','pBankName','pBankHolder','pBankAcc','pPayNow'];
+
+function setLocked(locked){
+  profileIds.forEach(id=>{ document.getElementById(id).disabled = locked; });
+}
+
+function toggleProfileLock(){
+  const isLocked = document.getElementById('pName').disabled;
+  if(!isLocked){
+    // currently editable, user clicked "Save"
+    const anyFilled = profileIds.some(id=>document.getElementById(id).value.trim() !== '');
+    if(!anyFilled){
+      document.getElementById('profileStatus').textContent = 'Fill in at least one field first.';
+      return;
+    }
+    setLocked(true);
+    document.getElementById('editBtn').textContent = 'Edit';
+    document.getElementById('profileStatus').textContent = 'Saved — downloading your personalized form…';
+    downloadPersonalizedCopy();
+  } else {
+    // currently locked, user clicked "Edit"
+    setLocked(false);
+    document.getElementById('editBtn').textContent = 'Save';
+    document.getElementById('profileStatus').textContent = 'Editing — click "Save" when done.';
+  }
+}
+
+function downloadPersonalizedCopy(){
+  const clone = document.documentElement.cloneNode(true);
+
+  // bake the current profile values + locked state into the saved copy
+  profileIds.forEach(id=>{
+    const liveEl = document.getElementById(id);
+    const cloneEl = clone.querySelector('#' + id);
+    cloneEl.setAttribute('value', liveEl.value);
+    cloneEl.setAttribute('disabled', '');
+  });
+  const cloneEditBtn = clone.querySelector('#editBtn');
+  if(cloneEditBtn) cloneEditBtn.textContent = 'Edit';
+  const cloneStatus = clone.querySelector('#profileStatus');
+  if(cloneStatus) cloneStatus.textContent = '';
+
+  // leave a blank claim table and trip details, ready for a new claim
+  const cloneTbody = clone.querySelector('#expenseBody');
+  if(cloneTbody) cloneTbody.innerHTML = '';
+  clone.querySelectorAll('.grid-3 input').forEach(inp=>inp.setAttribute('value',''));
+  const cloneSubmitDate = clone.querySelector('#submitDate');
+  if(cloneSubmitDate) cloneSubmitDate.removeAttribute('value');
+
+  const htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([htmlStr], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'trip_expense_claim_form.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
