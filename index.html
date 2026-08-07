@@ -1067,7 +1067,7 @@ function loadSaved(){
     }
     const bRaw = localStorage.getItem('pc_bank');
     const b = bRaw ? lsDecode(bRaw) : null; // no plain JSON fallback — encoded only
-    if(b&&b.acc){
+    if(b&&(b.acc||b.paynow||b.bank)){
       document.getElementById('b-bank').value=b.bank||'';
       document.getElementById('b-name').value=b.bname||'';
       document.getElementById('b-acc').value=b.acc||'';
