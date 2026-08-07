@@ -346,7 +346,7 @@ canvas#sig{display:block;border:1.5px solid var(--border);border-radius:8px;widt
       <div id="profile-edit">
         <div class="fg c2">
           <div class="f"><label>Full Name *</label><input id="d-name" type="text" placeholder="e.g. Sarah Lim" onblur="autoSaveProfile()"></div>
-          <div class="f"><label>Email Address</label><input id="d-email" type="email" placeholder="email@example.com" onblur="autoSaveProfile()"></div>
+          <div class="f"><label>Email Address *</label><input id="d-email" type="email" placeholder="email@example.com" onblur="autoSaveProfile()"></div>
         </div>
         <div class="fg c2">
           <div class="f"><label>Mobile Number</label><input id="d-phone" type="tel" placeholder="+65 XXXX XXXX" onblur="autoSaveProfile()"></div>
@@ -902,6 +902,10 @@ function go(n){
 function next(from){
   if(from===1){
     if(!document.getElementById('d-name').value.trim()) return alert('Please enter your name.');
+const emailVal = document.getElementById('d-email').value.trim();
+    if(!emailVal){ document.getElementById('d-email').focus(); return alert('Email address is required.'); }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRegex.test(emailVal)){ document.getElementById('d-email').focus(); return alert('Please enter a valid email address.'); }
     if(!document.getElementById('d-date').value) return alert('Please select an invoice date.');
     lockProfile();
   }
