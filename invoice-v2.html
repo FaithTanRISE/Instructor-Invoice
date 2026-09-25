@@ -740,7 +740,7 @@ function lsEncode(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(ob
 function lsDecode(str){try{return JSON.parse(decodeURIComponent(escape(atob(str))));}catch(e){return null;}}
 
 function autoSaveProfile(){
-  localStorage.setItem('pc_profile',lsEncode({name:document.getElementById('d-name').value,email:document.getElementById('d-email').value,phone:document.getElementById('d-phone').value}));
+  localStorage.setItem('pc_profile',lsEncode({name:document.getElementById('d-name').value,email:'',phone:document.getElementById('d-phone').value}));
 }
 function toggleBankRequired(){
   const hasPaynow=document.getElementById('b-paynow').value.trim().length>0;
