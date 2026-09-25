@@ -1,4 +1,3 @@
-
 // CONFIG
 const GS_URL  = "https://script.google.com/macros/s/AKfycby8dRHqbZJ6wcXW8aTTkJxO5yzwHFbMgB0tDTQrLs0sIaQN_6KcsnQr9xJ5p3kJzSiY/exec";
 const GS_LINK = "";
