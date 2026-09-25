@@ -306,6 +306,7 @@ canvas#sig{display:block;border:1.5px solid var(--border);border-radius:8px;widt
     </div>
     <div class="btn-row"><span></span><button class="btn-p" onclick="next(1)">Next: Programs &rarr;</button></div>
   </div>
+  <input type="text" id="honeypot" style="display:none" tabindex="-1" autocomplete="off">
 
   <!-- STEP 2 -->
   <div class="page" id="step2">
@@ -1342,7 +1343,8 @@ async function submitForm(){
     accNo:sanitise(document.getElementById('b-acc').value),
     paynow:sanitise(document.getElementById('b-paynow').value),
     remarks:sanitise(document.getElementById('b-notes').value),
-    token:FORM_TOKEN
+    token:FORM_TOKEN,
+honeypot:document.getElementById('honeypot').value,
   };
 
   if(GS_URL!=="YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"){
