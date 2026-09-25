@@ -1824,7 +1824,7 @@ async function submitForm(){
       formData.append('data', JSON.stringify(payload));
       fetch(GS_URL, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         body: formData
       }).then(()=>{
         document.getElementById('gsStatus').textContent='✓ Saved to sheet';
