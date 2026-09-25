@@ -1823,25 +1823,31 @@ async function submitForm(){
       const formData = new FormData();
       formData.append('data', JSON.stringify(payload));
       fetch(GS_URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: formData
-      }).then(()=>{
-        document.getElementById('gsStatus').textContent='✓ Saved to sheet';
-      }).catch(()=>{
-        document.getElementById('gsStatus').textContent='⚠ Check sheet manually';
-      });
-    } catch(e){
-      document.getElementById('gsStatus').textContent='⚠ Check sheet manually';
-    }
+  method: 'POST',
+  body: formData
+})
+.then(r => r.json())
+.then(result => {
+  if(result.status === 'error') {
+    alert(result.message);
+    document.getElementById('gsStatus').textContent = '⚠ ' + result.message;
+    return;
   }
   document.getElementById('mainForm').style.display='none';
   document.getElementById('successScreen').classList.add('show');
   document.getElementById('sucRef').textContent=invno||'No Invoice #';
   document.getElementById('sucMsg').textContent=`${payload.name}'s invoice totalling ${payload.grandTotal} has been recorded.`;
   buildPDF(payload);
-}
-
+  document.getElementById('gsStatus').textContent='✓ Saved to sheet';
+})
+.catch(() => {
+  document.getElementById('gsStatus').textContent='⚠ Check sheet manually';
+});
+    } catch(e){
+      document.getElementById('gsStatus').textContent='⚠ Check sheet manually';
+    }
+  }
+ 
 // ── BUILD PDF INVOICE ─────────────────────────
 function buildPDF(payload) {
   const fmt = v => v||'—';
