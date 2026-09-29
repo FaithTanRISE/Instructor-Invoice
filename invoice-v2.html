@@ -1463,7 +1463,14 @@ function buildPDF(payload){
   }
 }
 
-function printInvoice(){window.print();}
+function printInvoice(){
+  const name = document.getElementById('d-name').value.trim().replace(/\s+/g,'_');
+  const invno = document.getElementById('d-invno').value.trim().replace(/\s+/g,'_') || 'No_Inv_No';
+  const originalTitle = document.title;
+  document.title = name + '_Inv_' + invno;
+  window.print();
+  document.title = originalTitle;
+}
 
 function editInvoice(){
   document.getElementById('successScreen').classList.remove('show');
